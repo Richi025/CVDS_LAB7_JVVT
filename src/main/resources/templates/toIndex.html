@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Montserrat, sans-serif;
+            background: linear-gradient(150deg, #bff2d4, #e9bbf8);
+            height: 100vh;
+        }
+
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px; 
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        .container h1 {
+            text-align: center;
+        
+        }
+        .container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+
+
+        .table {
+            width: 100%;
+        }
+
+        th,
+        td {
+            padding: 12px 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #91ebb5;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .btn-primary {
+            width: 50%;
+            height: 25px;
+            border: none;
+            background: #91ebb5;
+            border-radius: 25px;
+            font-size: 10px;
+            color: white;
+            cursor: pointer;
+            outline: none;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            background: #bbecce;
+        }
+        .btn-primar {
+            width: 25%;
+            height: 50px;
+            border: none;
+            background: #91ebb5;
+            border-radius: 25px;
+            font-size: 15px;
+            color: white;
+            cursor: pointer;
+            outline: none;
+            margin-top: 10px;
+            
+        }
+
+        .btn-primar:hover {
+            background: #bbecce;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Empleados</title>
+</head>
+
+<body>
+<div class="container">
+    <h1>Lista de Empleados</h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Rol</th>
+            <th>Salario</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody id="employeeTableBody">
+        <tr th:each="employee : ${employees}">
+            <td th:text="${employee.employeeId}"></td>
+            <td th:text="${employee.firstName}"></td>
+            <td th:text="${employee.lastName}"></td>
+            <td th:text="${employee.role}"></td>
+            <td th:text="${employee.salary}"></td>
+            <td>
+                <button onclick="redirectTo('update/' + ${employee.employeeId})" class="btn btn-primary">Editar</button>
+                <button onclick="obtenerDatos(this)" class="btn btn-primary">Eliminar</button>
+
+
+            </td>
+            
+        </tr>
+        </tbody>
+    </table>
+
+    <button onclick="redirectTo('create')" class="btn btn-primar">Agregar Empleado</button>
+</div>
+
+<script>
+    function redirectTo(url) {
+
+        window.location.href = "/employee/" + url;
+    }
+
+    function obtenerDatos(btn) {
+            var row = btn.parentNode.parentNode;
+            var cells = row.getElementsByTagName("td");
+            var employeeId = cells[0].innerText;
+            window.location.href = "/employee/delete/" + employeeId;
+    }
+</script>
+</body>
+
+</html>
