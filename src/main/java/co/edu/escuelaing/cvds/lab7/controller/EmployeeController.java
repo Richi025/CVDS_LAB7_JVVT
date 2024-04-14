@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/employee")
@@ -24,6 +25,9 @@ public class EmployeeController {
     public String toList(Model model) {
         List<Employee> employees=employeeService.getAllEmployees();
         model.addAttribute("employees", employees);
+        for (Employee employee : employees) {
+            System.out.println(employee.toString());
+        }
         return "toIndex";
     }
 
@@ -42,32 +46,32 @@ public class EmployeeController {
 
     @GetMapping("/update/{id}")
     public String updateEmployee(@PathVariable String id, Model model) {
-        Employee employee = employeeService.getEmployee(id);
+        Optional<Employee> employee = employeeService.getEmployee(id);
         if (employee != null) {
             model.addAttribute("employee", employee);
             return "update";
         } else {
-            // Manejo de error si no se encuentra el empleado
             return "error";
         }
     }
-
+   
+ 
     @PostMapping("/update/{id}")
-    public String update(@PathVariable String id, String firstName, String lastName, String role, double salary) {
-        Employee employee = employeeService.getEmployee(id);
-        if (employee != null) {
-            employee.setFirstName(firstName);
-            employee.setLastName(lastName);
-            employee.setRole(role);
-            employee.setSalary(salary);
+    public String update(@PathVariable String id, @ModelAttribute("employee") Employee employeeUpdate) {
+        Optional<Employee> optionalEmployee = employeeService.getEmployee(id);
+        Employee employee = optionalEmployee.get();
+        if (!employee.equals(null)) {
+            employee.setFirstName(employeeUpdate.getFirstName());
+            employee.setLastName(employeeUpdate.getLastName());
+            employee.setRole(employeeUpdate.getRole());
+            employee.setSalary(employeeUpdate.getSalary());
             employeeService.updateEmployee(employee);
-            return "redirect:/employee/api";
+            return "redirect:/employee/toList";
         } else {
             // Manejo de error si no se encuentra el empleado
             return "error"; // Puedes redirigir a una página de error
         }
     }
-
 
     @GetMapping("/delete/{id}")
     public String deleteEmployee(@PathVariable String id) {

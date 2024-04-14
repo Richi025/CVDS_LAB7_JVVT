@@ -5,6 +5,9 @@ import co.edu.escuelaing.cvds.lab7.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
+
 import java.util.List;
 
 @Service
@@ -20,8 +23,17 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
-    public Employee getEmployee(String employeeId) {
-        return employeeRepository.getReferenceById(employeeId);
+    public int save(Employee employee) {
+        int res = 0;
+        Employee employees = employeeRepository.save(employee);
+        if (!employees.equals(null)){
+            res = 1;
+        }
+        return res;
+    }
+    
+    public Optional<Employee> getEmployee(String employeeId) {
+        return employeeRepository.findById(employeeId);
     }
 
     public List<Employee> getAllEmployees() {
